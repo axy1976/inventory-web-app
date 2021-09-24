@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='fontawesome/css/all.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap" rel="stylesheet"> 
+    <title>Inventory Web Application</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: 'Nunito', sans-serif;  /* Google fonts */
+        }
+        body {
+            /* background: url("{{url_for('static', filename='back.jpg')}}") repeat; */
+            background-size: 40%;
+        }
+        .container-box{
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="container-fluid bg-primary text-white p-3 text-center">
+        <h1>Inventory Managment Application</h1>
+    </header>
+
+    <div class="container-fluid container-box">
+        <div class="row">
+            <div class="col-md-8 mx-auto box-shadow shadow p-3 mb-5 bg-white rounded">
+                <nav>
+                    <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-product-tab" data-toggle="tab" href="#nav-product" role="tab" aria-controls="nav-product" aria-selected="true">Product</a>
+                        <a class="nav-item nav-link" id="nav-location-tab" data-toggle="tab" href="#nav-location" role="tab" aria-controls="nav-location" aria-selected="false">Location</a>
+                        <a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Movement</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Add Product</h4>
+                                    <form class="m-3" action="/AddProduct" method="post">
+                                        <input class="form-control mb-3" type="text" placeholder="Product ID" name="txtpid" id="txtpid">
+                                        <input class="btn btn-primary" type="submit" value="Add">
+                                    </form>
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Update Product</h4>
+                                    <form class="m-3" action="/UpdateProduct" method="post">
+                                        <select class="form-control" name="oldproduct" id="oldproduct">
+                                            {% for product in ProductDetails %}
+                                            <option value="{{product[0]}}">{{product[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input class="form-control mb-3" type="text" placeholder="New Product ID" name="newproduct" id="newproduct">
+                                        <input class="btn btn-primary" type="submit" value="Update">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Product List</h4>
+                                    <div class="m-3">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Product ID</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            {% for product in ProductDetails %}
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{product[0]}}</td>
+                                                    <td>
+                                                        <form action="/DeleteProduct" method="POST">
+                                                            <input type="hidden" value="{{ product[0] }}" name="dpid" />
+                                                            <button class="btn btn-danger" type="submit" ><i class="far fa-trash-alt"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Add Location</h4>
+                                    <form class="m-3" action="/AddLocation" method="post">
+                                        <input class="form-control mb-3" type="text" placeholder="Location ID" name="txtlid" id="txtlid">
+                                        <input class="btn btn-primary" type="submit" value="Add">
+                                    </form>
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Update Location</h4>
+                                    <form class="m-3" action="/UpdateLocation" method="post">
+                                        <select class="form-control" name="oldlocation" id="oldlocation">
+                                            {% for location in LocationList %}
+                                            <option value="{{location[0]}}">{{location[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input class="form-control mb-3" type="text" placeholder="New Location ID" name="newlocation" id="newlocation">
+                                        <input class="btn btn-primary" type="submit" value="Update">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Location List</h4>
+                                    <div class="m-3">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Location ID</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            {% for location in LocationList %}
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{location[0]}}</td>
+                                                    <td>
+                                                        <form action="/DeleteLocation" method="POST">
+                                                            <input type="hidden" value="{{ location[0] }}" name="dlid" />
+                                                            <button class="btn btn-danger" type="submit" ><i class="far fa-trash-alt"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Add Movement</h4>
+                                    <form class="m-3" action="/AddMovement" method="post">
+                                        <select class="form-control" name="fromlocation" id="fromlocation">
+                                            <option value="" selected>-</option>
+                                            {% for location in LocationList %}
+                                            <option value="{{location[0]}}">{{location[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="tolocation" id="tolocation">
+                                            <option value="" selected>-</option>
+                                            {% for location in LocationList %}
+                                            <option value="{{location[0]}}">{{location[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="productid" id="productid">
+                                            {% for product in ProductDetails %}
+                                            <option value="{{product[0]}}">{{product[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input class="form-control mb-3" type="text" placeholder="Quantity" name="txtqty" id="txtqty">
+                                        <input class="btn btn-primary" type="submit" value="Add">
+                                    </form>
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Update Movement</h4>
+                                    <form class="m-3" action="/UpdateMovement" method="post">
+                                        <select class="form-control" name="movementid" id="movementid">
+                                            {% for movement in Movements %}
+                                            <option value="{{movement[0]}}">{{movement[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="fromlocation" id="fromlocation">
+                                            <option value="" selected>-</option>
+                                            {% for location in LocationList %}
+                                            <option value="{{location[0]}}">{{location[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="tolocation" id="tolocation">
+                                            <option value="" selected>-</option>
+                                            {% for location in LocationList %}
+                                            <option value="{{location[0]}}">{{location[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <select class="form-control" name="productid" id="productid">
+                                            {% for product in ProductDetails %}
+                                            <option value="{{product[0]}}">{{product[0]}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                        <input class="form-control mb-3" type="text" placeholder="Quantity" name="txtqty" id="txtqty">
+                                        <input class="btn btn-primary" type="submit" value="Update">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="text-center">
+                                    <h4 class="text-white p-3 bg-primary rounded">Movement Records</h4>
+                                    <div class="m-3">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Timestamp</th>
+                                                    <th scope="col">From Location</th>
+                                                    <th scope="col">To Location</th>
+                                                    <th scope="col">Product ID</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            {% for movement in Movements %}
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{movement[1]}}</td>
+                                                    <td>{{movement[2]}}</td>
+                                                    <td>{{movement[3]}}</td>
+                                                    <td>{{movement[4]}}</td>
+                                                    <td>{{movement[5]}}</td>
+                                                    <td>
+                                                        <form action="/DeleteMovement" method="POST">
+                                                            <input type="hidden" value="{{ movement[0] }}" name="movementid" />
+                                                            <button class="btn btn-danger" type="submit" ><i class="far fa-trash-alt"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            if (location.hash) {
+                $("a[href='" + location.hash + "']").tab("show");
+            }
+            $(document.body).on("click", "a[data-toggle='tab']", function(event) {
+                location.hash = this.getAttribute("href");
+            });
+        });
+        $(window).on("popstate", function() {
+            var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+            $("a[href='" + anchor + "']").tab("show");
+        });
+    </script>
+</body>
+</html>
