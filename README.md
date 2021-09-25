@@ -1,4 +1,4 @@
-# Inventory web app
+# Inventory web application
 Hello everyone,
 
 This is my new assignment, a web application using python (flask), MySQL, HTML5, CSS3, Bootstrap 4.
