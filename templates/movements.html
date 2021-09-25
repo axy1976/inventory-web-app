@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='fontawesome/css/all.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap" rel="stylesheet"> 
+    <title>Inventory Web Application</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: 'Nunito', sans-serif;  /* Google fonts */
+        }
+        body {
+            /* background: url("{{url_for('static', filename='back.jpg')}}") repeat; */
+            background-size: 40%;
+        }
+        .container-box{
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="container-fluid bg-primary text-white rounded-0 text-center">
+        <h1 class="p-5">Inventory Managment Application</h1>
+        <nav class="navbar navbar-expand-lg navbar-light bg-none">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <h4><a class="nav-link" href="{{url_for('product')}}">Product</a></h4>
+                    </li>
+                    <li class="nav-item">
+                        <h4><a class="nav-link" href="{{url_for('location')}}">Location</a></h4>
+                    </li>
+                    <li class="nav-item active">
+                        <h4><a class="nav-link" href="{{url_for('movements')}}">Movements</a></h4>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="alert alert-danger text-center" id="msgbox" role="alert">{{messages}}</div>
+    <div class="container-fluid container-box">
+        <div class="row">
+            <div class="col-md-8 p-3 mb-5 bg-white rounded">
+                <div class="text-center border border-primary mb-2">
+                    <h4 class="text-white p-3 bg-primary rounded">Add Movement</h4>
+                    <form class="m-3 row" action="/AddMovement" method="post">
+                        <select class="form-control col-sm-3 mx-auto" name="fromlocation" id="fromlocation">
+                            <option value="" selected>-</option>
+                            {% for location in LocationList %}
+                            <option value="{{location[0]}}">{{location[0]}}</option>
+                            {% endfor %}
+                        </select>
+                        <select class="form-control col-sm-3 mx-auto" name="tolocation" id="tolocation">
+                            <option value="" selected>-</option>
+                            {% for location in LocationList %}
+                            <option value="{{location[0]}}">{{location[0]}}</option>
+                            {% endfor %}
+                        </select>
+                        <select class="form-control col-sm-3 mx-auto" name="productid" id="productid" required>
+                            {% for product in ProductDetails %}
+                            <option value="{{product[0]}}">{{product[0]}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <input class="form-control col-sm-2 mx-auto" type="text" placeholder="Quantity" name="txtqty" id="txtqty" required>
+                        <input class="btn btn-primary" type="submit" value="Add">
+                    </form>
+                </div>
+                <div class="row">
+                    <!-- <div class="col-4">
+                        <div class="text-center">
+                            <h4 class="text-white p-3 bg-primary rounded">Update Movement</h4>
+                            <form class="m-3" action="/UpdateMovement" method="post">
+                                <select class="form-control" name="movementid" id="movementid" required>
+                                    {% for movement in Movements %}
+                                    <option value="{{movement[0]}}">{{movement[0]}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <select class="form-control" name="fromlocation" id="fromlocation">
+                                    <option value="" selected>-</option>
+                                    {% for location in LocationList %}
+                                    <option value="{{location[0]}}">{{location[0]}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <select class="form-control" name="tolocation" id="tolocation">
+                                    <option value="" selected>-</option>
+                                    {% for location in LocationList %}
+                                    <option value="{{location[0]}}">{{location[0]}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <select class="form-control" name="productid" id="productid" required>
+                                    {% for product in ProductDetails %}
+                                    <option value="{{product[0]}}">{{product[0]}}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <input class="form-control mb-3" type="text" placeholder="Quantity" name="txtqty" id="txtqty" required>
+                                <input class="btn btn-primary" type="submit" value="Update">
+                            </form>
+                        </div>
+                    </div> -->
+                    <div class="col-12">
+                        <div class="text-center">
+                            <h4 class="text-white p-3 bg-primary rounded">Movement Records</h4>
+                            <div class="m-3">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Timestamp</th>
+                                            <th scope="col">From Location</th>
+                                            <th scope="col">To Location</th>
+                                            <th scope="col">Product ID</th>
+                                            <th scope="col">Quantity</th>
+                                            <!-- <th scope="col">Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    {% for movement in Movements %}
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">{{movement[0]}}</th>
+                                                <td>{{movement[1]}}</td>
+                                                <td>{{movement[2]}}</td>
+                                                <td>{{movement[3]}}</td>
+                                                <td>{{movement[4]}}</td>
+                                                <td>{{movement[5]}}</td>
+                                                <!-- <td>
+                                                    <form action="/DeleteMovement" method="POST">
+                                                        <input type="hidden" value="{{ movement[0] }}" name="movementid" />
+                                                        <button class="btn btn-danger" type="submit" ><i class="far fa-trash-alt"></i></button>
+                                                    </form>
+                                                </td> -->
+                                            </tr>
+                                        </tbody>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 p-3 mb-5 bg-white rounded">
+                <div class="text-center">
+                    <h4 class="text-white p-3 bg-primary rounded">Product Balance GridView</h4>
+                    <div class="m-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Warehouse</th>
+                                    <th scope="col">Quantity</th>
+                                </tr>
+                            </thead>
+                            {% for pds in ProductBalance %}
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{{loop.index}}</th>
+                                    <td>{{pds[1]}}</td>
+                                    <td>{{pds[2]}}</td>
+                                    <td>{{pds[3]}}</td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function flaskmsg() {
+            if (document.getElementById('msgbox').innerHTML == "") {
+                document.getElementById('msgbox').style.visibility = "hidden";
+            } else {
+                document.getElementById('msgbox').style.visibility = "visible";
+            }
+        }
+        flaskmsg();
+    </script>
+</body>
+</html>
