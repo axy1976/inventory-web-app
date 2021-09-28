@@ -14,15 +14,15 @@ Simple inventory managment system developed by me. There are 3 template pages (P
 ---->>>
 
 
-https://user-images.githubusercontent.com/52463851/134799917-c87481d8-ced8-450b-82f2-9c5ee801f54c.mp4
+![product management](https://user-images.githubusercontent.com/52463851/135025678-55eb7a8b-d07d-4e9a-8741-7100ccd6e29d.gif)
 
 
 
-https://user-images.githubusercontent.com/52463851/134799934-434d8b45-a4a6-4cb2-a46b-804309bfad26.mp4
+![location management](https://user-images.githubusercontent.com/52463851/135025698-40fe09d7-6e50-4c56-8edc-1054b1228284.gif)
 
 
 
-https://user-images.githubusercontent.com/52463851/134799940-71ec693f-1424-45d7-8737-d15a66b596f1.mp4
+![product movement management](https://user-images.githubusercontent.com/52463851/135025711-ac3269a1-67d1-4662-ba35-dbb89c4ead63.gif)
 
 
 Technology used
